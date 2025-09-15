@@ -1,0 +1,8 @@
+//
+// Created by regal on 9/15/25.
+//
+
+#ifndef REDISKNOCKOFF_INDEXMAP_H
+#define REDISKNOCKOFF_INDEXMAP_H
+
+#endif //REDISKNOCKOFF_INDEXMAP_H
