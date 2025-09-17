@@ -5,6 +5,10 @@
 #include "Engine.h"
 #include <iostream>
 #include <filesystem>
+#include <vector>
+
+
+//helper functions --start--
 
 void create_new_instance(const std::string& instance)
 {
@@ -26,6 +30,15 @@ void create_new_instance(const std::string& instance)
     }
 }
 
+//overloading std::pair ostream
+template <typename T, typename U>
+std::ostream& operator<<(std::ostream& out, const std::pair<T, U>& p)
+{
+    out << "(" << p.first << ", " << p.second << ")";
+    return out;
+}
+
+//Engine implementation
 RK::Engine::Engine(const std::string& instance)
     :m_instance(instance)
 {
@@ -45,6 +58,52 @@ RK::Engine::Engine(const std::string& instance)
         return;
     }
     std::cout << "Successfully opened instance data file.\n";
+}
+
+std::string RK::Engine::getData(const std::string& key, RK::IndexMap& indexMap)
+{
+    const std::streampos offset {indexMap.get(key)};
+    if (offset == -1)
+    {
+        std::cout << "Data not found \n";
+        return "";
+    }
+
+    m_instanceDataFile.seekg(offset);
+    std::string line{};
+    std::getline(m_instanceDataFile, line);
+    std::stringstream ss{line};
+    std::string cell{};
+    std::vector<std::string> row{};
+    while (std::getline(ss, cell, ','))
+    {
+        row.emplace_back(cell);
+    }
+
+    return row[1];
+}
+
+bool RK::Engine::putData(const std::pair<std::string, std::string>& pair, RK::IndexMap& indexMap)
+{
+    if (indexMap.get(pair.first))
+    {
+        const auto value {getData(pair.first, indexMap)};
+        if (value == pair.second)
+        {
+            std::cerr << "Data already exists, skipping write operation \n";
+            return false;
+        }
+    }
+    const std::streampos currentOffset{m_instanceDataFile.tellp()};
+    m_instanceDataFile << pair.first << "," << pair.second << "," << "F" << '\n';
+    if (m_instanceDataFile.fail())
+    {
+        std::cerr << "Error writing to data file.\n";
+        return false;
+    }
+    indexMap.addIndex(pair.first, currentOffset);
+    std::cout << pair << " successfully inserted \n";
+    return true;
 }
 
 

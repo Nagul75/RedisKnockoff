@@ -7,6 +7,7 @@
 
 #include <string>
 #include <fstream>
+#include "IndexMap.h"
 
 namespace RK
 {
@@ -15,9 +16,9 @@ namespace RK
     public:
         explicit Engine(const std::string& instance);
 
-        bool putData(std::pair<std::string, std::string>& pair);
-        bool getData(std::string& key);
-        bool deleteData(std::string& key);
+        bool putData(const std::pair<std::string, std::string>& pair, RK::IndexMap& indexMap);
+        std::string getData(const std::string& key, RK::IndexMap& indexMap);
+        bool deleteData(const std::string& key, RK::IndexMap& indexMap);
 
         bool putInstance(std::string& instance);
         bool deleteInstance(std::string& instance);
