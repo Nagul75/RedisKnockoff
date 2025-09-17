@@ -152,5 +152,21 @@ bool RK::Engine::deleteInstance(const std::string& instance)
     return true;
 }
 
+bool RK::Engine::swapInstance(const std::string& instance, RK::IndexMap& indexMap)
+{
+    if (!std::filesystem::is_directory(instance))
+    {
+        std::cerr << "Instance doesn't exist! \n";
+        return false;
+    }
+    m_instance = instance;
+    openData();
+    indexMap.setInstance(instance);
+    indexMap.openIndex();
+    std::cout << "Successfully swapped instance! \n";
+    return true;
+}
+
+
 
 
