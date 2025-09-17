@@ -8,9 +8,7 @@
 #include <vector>
 #include <sstream>
 
-
-RK::IndexMap::IndexMap(const std::string& instance)
-    :m_instance(instance)
+void RK::IndexMap::openIndex()
 {
     m_indices.clear();
     m_indexFile.open(m_instance + "/" + m_instance + "_index.txt", std::ios::in | std::ios::out | std::ios::app);
@@ -34,6 +32,12 @@ RK::IndexMap::IndexMap(const std::string& instance)
     }
     m_indexFile.close();
     std::cout << "Finished reading file \n";
+}
+
+RK::IndexMap::IndexMap(const std::string& instance)
+    :m_instance(instance)
+{
+    openIndex();
 }
 
 

@@ -38,9 +38,7 @@ std::ostream& operator<<(std::ostream& out, const std::pair<T, U>& p)
     return out;
 }
 
-//Engine implementation
-RK::Engine::Engine(const std::string& instance)
-    :m_instance(instance)
+void RK::Engine::openData()
 {
     std::string dataFilePath = m_instance + "/" + m_instance + "_data.txt";
 
@@ -54,10 +52,16 @@ RK::Engine::Engine(const std::string& instance)
     if (!m_instanceDataFile.is_open())
     {
         std::cerr << "Cannot open instance data at path: " << dataFilePath << "\n";
-        // Consider throwing an exception here to signal a fatal error.
         return;
     }
     std::cout << "Successfully opened instance data file.\n";
+}
+
+//Engine implementation
+RK::Engine::Engine(const std::string& instance)
+    :m_instance(instance)
+{
+    openData();
 }
 
 std::string RK::Engine::getData(const std::string& key, RK::IndexMap& indexMap)

@@ -19,6 +19,7 @@ namespace RK
         bool putData(const std::pair<std::string, std::string>& pair, RK::IndexMap& indexMap);
         std::string getData(const std::string& key, RK::IndexMap& indexMap);
         bool deleteData(const std::string& key, RK::IndexMap& indexMap);
+        void openData();
 
         bool putInstance(std::string& instance);
         bool deleteInstance(std::string& instance);
