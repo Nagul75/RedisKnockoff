@@ -13,7 +13,7 @@ RK::IndexMap::IndexMap(const std::string& instance)
     :m_instance(instance)
 {
     m_indices.clear();
-    m_indexFile.open(instance, std::ios::in | std::ios::out | std::ios::app);
+    m_indexFile.open(m_instance + "/" + m_instance + "_index.txt", std::ios::in | std::ios::out | std::ios::app);
     if (!m_indexFile.is_open())
     {
         std::cerr << "Error opening index \n";
@@ -40,7 +40,7 @@ RK::IndexMap::IndexMap(const std::string& instance)
 RK::IndexMap::~IndexMap()
 {
     std::cout << "Saving index file.\n";
-    m_indexFile.open(m_instance, std::ios::out | std::ios::trunc); // Overwrite the file on shutdown
+    m_indexFile.open(m_instance + "/" + m_instance + "_index.txt", std::ios::out | std::ios::trunc); // Overwrite the file on shutdown
     if (m_indexFile.is_open())
     {
         for (const auto& pair : m_indices)
@@ -64,4 +64,19 @@ void RK::IndexMap::addIndex(const std::string& key, const std::streampos pos)
 void RK::IndexMap::removeIndex(const std::string& key)
 {
     m_indices.erase(key);
+}
+
+std::streampos RK::IndexMap::get(const std::string& key)
+{
+    const auto it = m_indices.find(key);
+
+    // Check if the iterator is at the end of the map.
+    if (it != m_indices.end())
+    {
+        // Key exists, return the stored position.
+        return it->second;
+    }
+
+    // Key not found, return the sentinel value.
+    return -1;
 }

@@ -16,10 +16,11 @@ namespace RK
         explicit IndexMap(const std::string& instance);
         ~IndexMap();
 
-        std::unordered_map<std::string, std::streampos>& getIndices(){return m_indices;}
+        std::unordered_map<std::string, std::streampos>& getIndices() {return m_indices;}
 
         void addIndex(const std::string& key, std::streampos pos);
         void removeIndex(const std::string& key);
+        std::streampos get(const std::string& key);
     private:
         std::unordered_map<std::string, std::streampos> m_indices{}; // key : bytes
         std::fstream m_indexFile{};
