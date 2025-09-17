@@ -21,6 +21,8 @@ namespace RK
         void addIndex(const std::string& key, std::streampos pos);
         void removeIndex(const std::string& key);
         std::streampos get(const std::string& key);
+
+        void setInstance(const std::string& instance){m_instance = instance;}
     private:
         std::unordered_map<std::string, std::streampos> m_indices{}; // key : bytes
         std::fstream m_indexFile{};
