@@ -34,6 +34,11 @@ void RK::IndexMap::openIndex()
     std::cout << "Finished reading file \n";
 }
 
+void RK::IndexMap::closeIndex()
+{
+    m_indexFile.close();
+}
+
 RK::IndexMap::IndexMap(const std::string& instance)
     :m_instance(instance)
 {

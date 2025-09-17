@@ -18,6 +18,7 @@ namespace RK
 
         std::unordered_map<std::string, std::streampos>& getIndices() {return m_indices;}
         void openIndex();
+        void closeIndex();
         void addIndex(const std::string& key, std::streampos pos);
         void removeIndex(const std::string& key);
         std::streampos get(const std::string& key);
