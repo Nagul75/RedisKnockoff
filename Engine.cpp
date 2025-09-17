@@ -167,6 +167,54 @@ bool RK::Engine::swapInstance(const std::string& instance, RK::IndexMap& indexMa
     return true;
 }
 
+bool RK::Engine::updateInstance(const std::string& newInstance, RK::IndexMap& indexMap)
+{
+    // Close files first
+    indexMap.closeIndex();
+    if (m_instanceDataFile.is_open())
+    {
+        m_instanceDataFile.close();
+    }
+
+    if (!std::filesystem::is_directory(m_instance))
+    {
+        std::cerr << m_instance << " doesn't exist! \n";
+        return false;
+    }
+
+    // Create the new directory first
+    std::filesystem::create_directory(newInstance);
+
+    // Iterate through all files in the old directory and move them to the new one
+    for (const auto& entry : std::filesystem::directory_iterator(m_instance))
+    {
+        const std::filesystem::path new_path = newInstance / entry.path().filename();
+        std::filesystem::rename(entry.path(), new_path);
+    }
+
+    std::filesystem::remove(m_instance);
+
+    // Update the instance name in the class
+    const std::string oldInstance = m_instance;
+    m_instance = newInstance;
+
+    // You will still need to rename the files inside the directory
+    const std::filesystem::path old_data_name = m_instance + "/" + (oldInstance + "_data.txt");
+    const std::filesystem::path new_data_name = m_instance + "/" + (m_instance + "_data.txt");
+    std::filesystem::rename(old_data_name, new_data_name);
+
+    const std::filesystem::path old_index_name = m_instance + "/" + (oldInstance + "_index.txt");
+    const std::filesystem::path new_index_name = m_instance + "/" + (m_instance + "_index.txt");
+    std::filesystem::rename(old_index_name, new_index_name);
+
+    std::cout << "Updated successfully! \n";
+    indexMap.setInstance(newInstance);
+    openData();
+    indexMap.openIndex();
+    return true;
+}
+
+
 
 
 

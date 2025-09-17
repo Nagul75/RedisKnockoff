@@ -22,7 +22,7 @@ namespace RK
         void openData();
 
         static bool createInstance(const std::string& instance);
-        static bool updateInstance(std::string& oldInstance, std::string& newInstance);
+        bool updateInstance(const std::string& newInstance, RK::IndexMap& indexMap);
         static bool deleteInstance(const std::string& instance);
 
         bool swapInstance(const std::string& instance, RK::IndexMap& indexMap);
