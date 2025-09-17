@@ -85,7 +85,7 @@ std::string RK::Engine::getData(const std::string& key, RK::IndexMap& indexMap)
 
 bool RK::Engine::putData(const std::pair<std::string, std::string>& pair, RK::IndexMap& indexMap)
 {
-    if (indexMap.get(pair.first))
+    if (indexMap.get(pair.first) != -1)
     {
         const auto value {getData(pair.first, indexMap)};
         if (value == pair.second)
@@ -106,4 +106,22 @@ bool RK::Engine::putData(const std::pair<std::string, std::string>& pair, RK::In
     return true;
 }
 
+bool RK::Engine::deleteData(const std::string& key, RK::IndexMap& indexMap)
+{
+    if (indexMap.get(key) == -1)
+    {
+        std::cerr << "Data doesn't exist! \n";
+        return false;
+    }
+    const std::string value{getData(key, indexMap)};
+    m_instanceDataFile << key << "," << value << "," << "T" << '\n';
+    if (m_instanceDataFile.fail())
+    {
+        std::cerr << "Error deleting data \n";
+        return false;
+    }
+    indexMap.removeIndex(key);
+    std::cout << "(" << key << ", " << value << ") deleted successfully \n";
+    return true;
+}
 
