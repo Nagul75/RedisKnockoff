@@ -36,18 +36,6 @@ void RK::IndexMap::openIndex()
 
 void RK::IndexMap::closeIndex()
 {
-    m_indexFile.close();
-}
-
-RK::IndexMap::IndexMap(const std::string& instance)
-    :m_instance(instance)
-{
-    openIndex();
-}
-
-
-RK::IndexMap::~IndexMap()
-{
     std::cout << "Saving index file.\n";
     m_indexFile.open(m_instance + "/" + m_instance + "_index.txt", std::ios::out | std::ios::trunc); // Overwrite the file on shutdown
     if (m_indexFile.is_open())
@@ -63,6 +51,18 @@ RK::IndexMap::~IndexMap()
     {
         std::cerr << "Error saving index file.\n";
     }
+}
+
+RK::IndexMap::IndexMap(const std::string& instance)
+    :m_instance(instance)
+{
+    openIndex();
+}
+
+
+RK::IndexMap::~IndexMap()
+{
+    closeIndex();
 }
 
 void RK::IndexMap::addIndex(const std::string& key, const std::streampos pos)
