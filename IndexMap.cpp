@@ -17,6 +17,7 @@ RK::IndexMap::IndexMap(const std::string& instance)
     if (!m_indexFile.is_open())
     {
         std::cerr << "Error opening index \n";
+        return;
     }
     std::string line{};
     while (std::getline(m_indexFile, line))
