@@ -129,3 +129,28 @@ bool RK::Engine::deleteData(const std::string& key, RK::IndexMap& indexMap)
     return true;
 }
 
+bool RK::Engine::createInstance(const std::string& instance)
+{
+    if (std::filesystem::is_directory(instance))
+    {
+        std::cerr << "Instance already exists! \n";
+        return false;
+    }
+    create_new_instance(instance);
+    return true;
+}
+
+bool RK::Engine::deleteInstance(const std::string& instance)
+{
+    if (!std::filesystem::is_directory(instance))
+    {
+        std::cerr << "Instance doesn't exist! \n";
+        return false;
+    }
+    std::filesystem::remove_all(instance);
+    std::cout << "Deleted instance successfully \n";
+    return true;
+}
+
+
+

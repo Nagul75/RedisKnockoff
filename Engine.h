@@ -21,9 +21,11 @@ namespace RK
         bool deleteData(const std::string& key, RK::IndexMap& indexMap);
         void openData();
 
-        bool putInstance(std::string& instance);
-        bool deleteInstance(std::string& instance);
-        bool swapInstance(std::string& instance);
+        static bool createInstance(const std::string& instance);
+        static bool updateInstance(std::string& oldInstance, std::string& newInstance);
+        static bool deleteInstance(const std::string& instance);
+
+        bool swapInstance(const std::string& instance);
 
     private:
         std::string m_instance{};
