@@ -23,7 +23,7 @@ namespace RK
 
         static bool createInstance(const std::string& instance);
         bool updateInstance(const std::string& newInstance, RK::IndexMap& indexMap);
-        static bool deleteInstance(const std::string& instance);
+        bool deleteInstance(const std::string& instance, RK::IndexMap& indexMap);
 
         bool swapInstance(const std::string& instance, RK::IndexMap& indexMap);
 
