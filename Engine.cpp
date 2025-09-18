@@ -54,6 +54,7 @@ void RK::Engine::openData()
         std::cerr << "Cannot open instance data at path: " << dataFilePath << "\n";
         return;
     }
+    m_instanceDataFile.seekp(0, std::ios_base::end);
     std::cout << "Successfully opened instance data file.\n";
 }
 
@@ -81,6 +82,7 @@ std::string RK::Engine::getData(const std::string& key, RK::IndexMap& indexMap)
     std::vector<std::string> row{};
     while (std::getline(ss, cell, ','))
     {
+        std::cout << cell << '\n';
         row.emplace_back(cell);
     }
 
@@ -105,6 +107,7 @@ bool RK::Engine::putData(const std::pair<std::string, std::string>& pair, RK::In
         std::cerr << "Error writing to data file.\n";
         return false;
     }
+    std::cout << "Index: " << pair.first << "," << currentOffset << '\n';
     indexMap.addIndex(pair.first, currentOffset);
     std::cout << pair << " successfully inserted \n";
     return true;
@@ -140,13 +143,22 @@ bool RK::Engine::createInstance(const std::string& instance)
     return true;
 }
 
-bool RK::Engine::deleteInstance(const std::string& instance)
+bool RK::Engine::deleteInstance(const std::string& instance, RK::IndexMap& indexMap)
 {
     if (!std::filesystem::is_directory(instance))
     {
         std::cerr << "Instance doesn't exist! \n";
         return false;
     }
+    if (instance == m_instance)
+    {
+        if (m_instanceDataFile.is_open())
+        {
+            m_instanceDataFile.close();
+        }
+        indexMap.closeIndex();
+    }
+
     std::filesystem::remove_all(instance);
     std::cout << "Deleted instance successfully \n";
     return true;
@@ -159,6 +171,8 @@ bool RK::Engine::swapInstance(const std::string& instance, RK::IndexMap& indexMa
         std::cerr << "Instance doesn't exist! \n";
         return false;
     }
+    m_instanceDataFile.close();
+    indexMap.closeIndex();
     m_instance = instance;
     openData();
     indexMap.setInstance(instance);
